@@ -1,5 +1,5 @@
-var express =require("express");
-var app =express();
+var express = require("express");
+var app = express();
 var bodyParser = require ("body-parser");
 var mongoose = require("mongoose");
 //requires express libraries
@@ -10,11 +10,13 @@ var LocalStrategy = require("passport-local")
 
 var User = require('./models/user')
 
+// Using .env file (safe)
+require('dotenv').config();
 
 
 //CONNECT TO MONGODB*********************************
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://listings:54AJHQEIjMc4stvC@listings-leyhu.mongodb.net/test?retryWrites=true&w=majority";
+const uri = process.env.ATLAS_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true });
 client.connect(err => {
   const collection = client.db("test").collection("devices");
