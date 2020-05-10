@@ -1,0 +1,95 @@
+
+<%- include ("partials/header") %>
+<h1><%= donations[0].author.username %> </h1>
+
+<% donations.forEach(function(donation){ %>
+  <div>
+      <h6><%=donation.item%></h4>
+      >
+      <!-- <h4><%=donation.item%></h4>
+      <h4><%=donation.address%></h4> -->
+  </div>
+<% }); %>
+<h1>DONATIONS PAGE</h1>
+
+<!-- <h1>
+<%=donations.name%>
+<%=donations.item %>
+<%= donations.address %>
+</h1> -->
+<table class="table table-dark">
+    <thead>
+        PENDING DONATIONS
+    </thead>
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Item</th>
+        <th scope="col">Address</th>
+        <th scope="col">Time Submitted:</th>
+        <th scope="col">Status</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>SUYASH BEANS</td>
+        <td>HEINZ</td>
+        <td>DONUTS</td>
+        <td scope="col"><button>View Status</button></td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+        <td scope="col"><button>View Status</button></td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>@twitter</td>
+        <td scope="col"><button>View Status</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <a href = "" class = "btn btn-primary col-md-12">View Status</a>
+  
+  <table class="table table-dark">
+    <thead>
+        PAST DONATIONS :)
+    </thead>
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Handle</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>@twitter</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <%- include ("partials/footer") %>
