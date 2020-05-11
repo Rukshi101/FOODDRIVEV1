@@ -112,21 +112,22 @@ app.get("/register",function(req,res){
 });
 //HANDLE SIGNUP LOGIC
 app.post("/register",function(req,res){
-    var lat = 0;
-    var long = 0;
 
     // ADD GEOCODE API CALL HERE
 
+    console.log(req.body)
+
     var newUser = new User({
         username:req.body.username,
+        password: req.body.password,
         phone: req.body.phone,
         email: req.body.email,
         address: req.body.address,
         postal_code: req.body.postal_code,
-        longitude: long,
-        lat: lat
+        longitude: 0,
+        latitude: 0
     });
-    User.register(newUser,req.body.password,function(err,user){
+    User.register(newUser, newUser.password,function(err,user){
         if(err){
             console.log(err);
             return res.render("register");
