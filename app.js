@@ -2,13 +2,15 @@ var express = require("express");
 var app = express();
 var bodyParser = require ("body-parser");
 var mongoose = require("mongoose");
-//requires express libraries
 
+//requires express libraries
 var passport = require("passport")
 var LocalStrategy = require("passport-local")
 
 
 var User = require('./models/user')
+var Donation = require('./models/donations')
+var Trip = require('./models/trips')
 
 // Using .env file (safe)
 require('dotenv').config();
@@ -52,24 +54,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
-
-//SCHEMA SETUP
-var donationsSchema = new mongoose.Schema({
-    name:String,
-    item: String,
-    address:String,
-    author: {
-        id:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User"
-    },
-    username:String
-    }
-})
-
-var Donation = mongoose.model("Donation",donationsSchema)
-
 app.set('view engine','ejs');
 
 app.get('/',function(req,res){
@@ -86,15 +70,15 @@ app.get('/donations',isLoggedIn,function(req,res){
     });
 });
 
-app.post('/donations',isLoggedIn,function(req,res){
-    var name = req.body.name;
-    var item = req.body.item;
-    var address = req.body.address;
+app.post('/donations', isLoggedIn, function(req,res){
     var author = {
-        id:req.user._id,
-        username:req.user.username
+        id: req.user._id,
     }
-    var newDonationObject = {name:name,item:item,address:address,author:author};
+    var newDonationObject = {
+        author: author,
+        product: req.body.product,
+        status: 'pending'
+    };
     console.log(req.user);
     //info about currently logged in user
 
@@ -128,7 +112,20 @@ app.get("/register",function(req,res){
 });
 //HANDLE SIGNUP LOGIC
 app.post("/register",function(req,res){
-    var newUser = new User({username:req.body.username});
+    var lat = 0;
+    var long = 0;
+
+    // ADD GEOCODE API CALL HERE
+
+    var newUser = new User({
+        username:req.body.username,
+        phone: req.body.phone,
+        email: req.body.email,
+        address: req.body.address,
+        postal_code: req.body.postal_code,
+        longitude: long,
+        lat: lat
+    });
     User.register(newUser,req.body.password,function(err,user){
         if(err){
             console.log(err);
