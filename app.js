@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 var bodyParser = require ("body-parser");
 var mongoose = require("mongoose");
+const axios = require('axios');
 
 //requires express libraries
 var passport = require("passport")
@@ -15,6 +16,8 @@ var Trip = require('./models/trips')
 // Using .env file (safe)
 require('dotenv').config();
 
+// Getting Geocode API Key
+const BING_MAPS_KEY = process.env.BING_API_KEY;
 
 //CONNECT TO MONGODB*********************************
 const MongoClient = require('mongodb').MongoClient;
@@ -110,12 +113,35 @@ app.get("/donations/:id",function(req,res){
 app.get("/register",function(req,res){
     res.render("register")
 });
+
+
 //HANDLE SIGNUP LOGIC
-app.post("/register",function(req,res){
+app.post("/register", async function(req,res){
 
     // ADD GEOCODE API CALL HERE
 
+    // var coordinates = await bingMapApiCall(req.body.postal_code);
+
+    var url = 'http://dev.virtualearth.net/REST/v1/Locations?postalCode=' + String(req.body.postal_code) + '&maxResults=1&key=' + String(BING_MAPS_KEY);
+
+    var lat;
+
+    var long;
+
+    await axios.get(url)
+    .then(response => { 
+        lat = await response.data['resourceSets'][0]['resources'][0]['point']['coordinates'][0]
+        long = await response.data['resourceSets'][0]['resources'][0]['point']['coordinates'][1];
+    })
+    .catch(error => {
+        console.log(error)
+    });
+
+    console.log('gang')
+
     console.log(req.body)
+    console.log(lat)
+    console.log(long)
 
     var newUser = new User({
         username:req.body.username,
@@ -124,8 +150,8 @@ app.post("/register",function(req,res){
         email: req.body.email,
         address: req.body.address,
         postal_code: req.body.postal_code,
-        longitude: 0,
-        latitude: 0
+        longitude: long,
+        latitude: lat
     });
     User.register(newUser, newUser.password,function(err,user){
         if(err){
