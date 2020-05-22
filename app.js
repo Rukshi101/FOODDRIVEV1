@@ -91,7 +91,8 @@ app.post('/donations', isLoggedIn, function(req,res){
     Donation.create(newDonationObject,function(err,newlyCreated){
         if (err){
             console.log(err);
-        }else{
+        }
+        else {
             console.log(newlyCreated)
             res.redirect("/donations")
         }
@@ -101,8 +102,43 @@ app.post('/donations', isLoggedIn, function(req,res){
 app.get('/donations/new',isLoggedIn,function(req,res){
     res.render('newDonation.ejs')
 })
+
+// Get JSON format of all donation objects in MongoDB
+app.get('/donations/all', function(req,res){
+    Donation.find()
+     .then(donations => res.json(donations))
+     .catch(err => res.status(400).json('Error: ' + err))
+});
+
+app.get('/donations/:id', function(req, res){
+    Donation.findById(req.params.id)
+        .then(donation => res.json(donation))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+app.delete('/donations/:id', function(req, res){
+    Donation.findByIdAndDelete(req.params.id)
+        .then(donation => res.json('Donation Deleted!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+})
+
+app.post('/donations/:id/update', function(req,res) {
+    Donation.findById(req.params.id)
+        .then(donation => {
+            author = req.body.author,
+            product = req.body.product,
+            status = req.body.status
+            
+            donation.save()
+                .then(() => res.json('Donation updated!'))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+})
+
+
 //SHOW-Shows more info on the donation and current status
-app.get("/donations/:id",function(req,res){
+app.get("/donations/:id", function(req,res){
     //view the users own donation with the given id
     res.render("show");
 })
@@ -118,10 +154,6 @@ app.get("/register",function(req,res){
 //HANDLE SIGNUP LOGIC
 app.post("/register", async function(req,res){
 
-    // ADD GEOCODE API CALL HERE
-
-    // var coordinates = await bingMapApiCall(req.body.postal_code);
-
     var url = 'http://dev.virtualearth.net/REST/v1/Locations?postalCode=' + String(req.body.postal_code) + '&maxResults=1&key=' + String(BING_MAPS_KEY);
 
     var lat;
@@ -130,14 +162,12 @@ app.post("/register", async function(req,res){
 
     await axios.get(url)
     .then(response => { 
-        lat = await response.data['resourceSets'][0]['resources'][0]['point']['coordinates'][0]
-        long = await response.data['resourceSets'][0]['resources'][0]['point']['coordinates'][1];
+        lat = response.data['resourceSets'][0]['resources'][0]['point']['coordinates'][0];
+        long = response.data['resourceSets'][0]['resources'][0]['point']['coordinates'][1];
     })
     .catch(error => {
         console.log(error)
     });
-
-    console.log('gang')
 
     console.log(req.body)
     console.log(lat)
