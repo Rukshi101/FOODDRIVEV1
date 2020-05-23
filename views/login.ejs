@@ -3,13 +3,19 @@
 
 <div class = "container">
     <!-- put into container  -->
-    <h1>LOGIN!</h1>
     <div>
-        <form action = "/login" method = "POST">
-            <input type = "text" name = "username" placeholder ="username">
-            <input type = "password" name = "password" placeholder = "password">
-            <input type = "submit" value = "Login">
-        </form>
+        <form style='margin-top: 2em;' action="/login" method="POST">
+            <div class='form-group'>
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name='username' id="username" placeholder="Enter Username" required>
+            </div>
+            <div class='form-group'>
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name='password' id="password" placeholder="Enter Password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Log In</button>
+          </form>
+          <a href='/register' style="margin-top: 1em;" class="btn btn-info btn-lg btn-block">Register</a>
     </div>
 
 

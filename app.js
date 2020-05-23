@@ -60,7 +60,8 @@ passport.deserializeUser(User.deserializeUser());
 app.set('view engine','ejs');
 
 app.get('/',function(req,res){
-    res.render("landing");
+    console.log(req.user)
+    res.render("landing", {user: req.user});
 })
 
 app.get('/donations',isLoggedIn,function(req,res){
@@ -68,12 +69,12 @@ app.get('/donations',isLoggedIn,function(req,res){
         if(err){
             console.log(err);
         }else{
-            res.render("donations",{donations: donations});
+            res.render("donations",{donations: donations, user: req.user});
         }
     });
 });
 
-app.post('/donations', isLoggedIn, function(req,res){
+app.post('/donations/new', isLoggedIn, function(req,res){
     var author = {
         id: req.user._id,
     }
@@ -100,7 +101,7 @@ app.post('/donations', isLoggedIn, function(req,res){
 });
 //NEW SHOW FORM TO CREATE A NEW DONATION
 app.get('/donations/new',isLoggedIn,function(req,res){
-    res.render('newDonation.ejs')
+    res.render('newDonation', {user: req.user})
 })
 
 // Get JSON format of all donation objects in MongoDB
@@ -147,7 +148,7 @@ app.get("/donations/:id", function(req,res){
 //===================
 //SHOW REGISTER FORM
 app.get("/register",function(req,res){
-    res.render("register")
+    res.render("register", {user: req.user})
 });
 
 
@@ -198,7 +199,7 @@ app.post("/register", async function(req,res){
 
 //show login form
 app.get('/login',function(req,res){
-    res.render('login');
+    res.render('login', {user: req.user});
 })
 
 

@@ -1,10 +1,11 @@
 <%- include ("partials/header") %>
 
-<h1>SUBMIT A NEW DONATION</h1>
-
-<form action = "/donations" method = "POST">
-    <input type = "text" name="product" placeholder = "Enter Product Details">
-    <input type="submit" value="Request Pickup!">
-</form>
+<form style='margin-top: 2em;' action="/donations/new" method="POST">
+    <div class='form-group'>
+        <label for="product">Donation Title</label>
+        <input type="text" class="form-control" name='product' id="product" placeholder="Enter A Title For Your Donation" required>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">Request Pickup!</button>
+  </form>
 
 <%- include ("partials/footer") %>
