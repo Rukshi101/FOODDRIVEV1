@@ -117,6 +117,12 @@ app.get('/donations/:id', function(req, res){
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+app.get('/users/:id', function(req, res){
+    User.findById(req.params.id)
+        .then(user => res.json(user))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 app.delete('/donations/:id', function(req, res){
     Donation.findByIdAndDelete(req.params.id)
         .then(donation => res.json('Donation Deleted!'))

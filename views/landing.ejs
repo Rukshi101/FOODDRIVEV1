@@ -5,6 +5,7 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <style>
       #map {position: absolute;  right: 0;  left: 0; margin-left:250px; margin-right:250px; height:600px}
@@ -29,7 +30,6 @@
     </div>
     
     <script>
-
        //Default map view
         var lat = 43.5890;
         var long = -79.6441;
@@ -65,6 +65,31 @@
         });
         circle.addTo(map);
       }
+
+      axios.get('/donations/all')
+      .then(response => {
+        console.log(response)
+        for(let donation of response.data) {
+          console.log(donation.author.id)
+          axios.get('/users/'+donation.author.id)
+          .then(response => { 
+            var user_lat = response.data.latitude;
+            var user_long = response.data.longitude;
+
+            console.log(user_lat)
+            console.log(user_long)
+
+            put_dot(user_lat, user_long);
+          })
+          .catch(error => {
+              console.log(error)
+          });
+
+        }
+      })
+      .catch(error => {
+          console.log(error)
+      });
 
     </script>
   </body>
