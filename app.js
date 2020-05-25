@@ -12,6 +12,7 @@ var LocalStrategy = require("passport-local")
 var User = require('./models/user')
 var Donation = require('./models/donations')
 var Trip = require('./models/trips')
+app.use( express.static( "public" ) );
 
 // Using .env file (safe)
 require('dotenv').config();
