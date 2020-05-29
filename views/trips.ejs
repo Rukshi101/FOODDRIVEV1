@@ -1,0 +1,93 @@
+<%- include ("partials/header") %>
+<!-- TO INCLUDE HEADER AND FOOTER EJS FILES  -->
+
+  <head>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link href="/css/one-page-wonder.min.css" rel="stylesheet">
+    
+
+
+  </head>
+
+  
+  <body>
+
+
+    <div class="container">
+      <div class="p-5">
+        <h2 class="display-4">Active Donation Map</h2>
+      </div>
+      <div id="map" style="width: 960px; height: 500px;"></div>
+    </div>
+    <%-
+    console.log (user); %>
+    <script>
+
+      var username = "<%= user.username %>";
+      var latitude = <%= user.latitude %>;
+      var longitude = <%= user.longitude %>;
+
+      console.log (latitude);    
+      
+
+       //Default map view
+        var lat = latitude;
+        var long = longitude;
+        var zoom = 15;
+
+      var map = L.map('map').setView([lat, long], zoom);
+
+
+
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',
+        {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            tileSize: 512,
+          zoomOffset: -1,
+          // id: 'mapbox/streets-v11',
+          id: 'mapbox/dark-v10',
+          // id: 'mapbox/navigation-preview-night-v4',
+          accessToken: 'pk.eyJ1IjoiaGVybWVzMjAyMCIsImEiOiJjazVpaXV2MXEwZjNxM2xwY2tmM3lrNnBpIn0.HHEVLVMufjns5YIvOXknDQ'
+      }).addTo(map);
+
+
+      function put_dot(lat, long) {
+        size = 200//icon size
+        var marker = L.marker([lat, long]);
+        marker.addTo(map);
+      }
+
+      axios.get('/donations/all')
+      .then(response => {
+    
+        for(let donation of response.data) {
+          console.log(donation.author.id)
+          axios.get('/users/'+donation.author.id)
+          .then(response => { 
+            var user_lat = response.data.latitude;
+            var user_long = response.data.longitude;
+
+            console.log(user_lat)
+            console.log(user_long)
+
+            put_dot(user_lat, user_long);
+          })
+          .catch(error => {
+              console.log(error)
+          });
+
+        }
+      })
+      .catch(error => {
+          console.log(error)
+      });
+
+    </script>
+  </body>
+</html>
+
+<%- include ("partials/footer") %>

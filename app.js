@@ -75,6 +75,18 @@ app.get('/donations',isLoggedIn,function(req,res){
     });
 });
 
+app.get('/trips',isLoggedIn,function(req,res){
+   
+    Donation.find({},function(err,donations){
+        if(err){
+            console.log(err);
+        }else{
+            res.render("trips",{donations: donations, user: req.user});
+        }
+    });
+        
+ 
+});
 app.post('/donations/new', isLoggedIn, function(req,res){
     var author = {
         id: req.user._id,
