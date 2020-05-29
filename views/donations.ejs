@@ -1,95 +1,35 @@
 
 <%- include ("partials/header") %>
-<h1><%= donations[0].author.username %> </h1>
 
-<% donations.forEach(function(donation){ %>
-  <div>
-      <h6><%=donation.item%></h4>
-      >
-      <!-- <h4><%=donation.item%></h4>
-      <h4><%=donation.address%></h4> -->
-  </div>
-<% }); %>
-<h1>DONATIONS PAGE</h1>
-
-<!-- <h1>
-<%=donations.name%>
-<%=donations.item %>
-<%= donations.address %>
-</h1> -->
-<table class="table table-dark">
-    <thead>
-        PENDING DONATIONS
-    </thead>
-    <thead>
+<div style='margin-top: 3em;' class='container'>
+  <table class="table table-hover">
+    <thead class="black white-text">
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Item</th>
-        <th scope="col">Address</th>
-        <th scope="col">Time Submitted:</th>
+        <th scope="col">Product Title</th>
         <th scope="col">Status</th>
-        
+        <th scope="col">Pickup Username</th>
+        <th scope="col">Pickup Date</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>SUYASH BEANS</td>
-        <td>HEINZ</td>
-        <td>DONUTS</td>
-        <td scope="col"><button>View Status</button></td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-        <td scope="col"><button>View Status</button></td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
-        <td scope="col"><button>View Status</button></td>
-      </tr>
-    </tbody>
-  </table>
 
-  <a href = "" class = "btn btn-primary col-md-12">View Status</a>
-  
-  <table class="table table-dark">
-    <thead>
-        PAST DONATIONS :)
-    </thead>
-    <thead>
+      <% for (var x = 0; x < donations.length; x++) { %>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
+        <th scope="row"><%= x %></th>
+        <td><%= donations[x].product %></td>
+        <td><%= donations[x].status %></td>
+        <% if (donations[x].pickup_username) { %>
+          <td><%= donations[x].pickup_username %></td>
+          <td><%= donations[x].pickup_date %></td>
+        <% } else { %>
+          <td>N/A</td>
+          <td>N/A</td>
+        <% } %>
       </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
-      </tr>
+      <% }; %>
     </tbody>
   </table>
+</div>
 
   <%- include ("partials/footer") %>

@@ -66,11 +66,25 @@ app.get('/',function(req,res){
 })
 
 app.get('/donations',isLoggedIn,function(req,res){
-    Donation.find({},function(err,donations){
+    console.log(req.user)
+    Donation.findOne({author: {id: req.user._id}, status: 'pending'},function(err,donation){
         if(err){
             console.log(err);
         }else{
-            res.render("donations",{donations: donations, user: req.user});
+            console.log(donation)
+            if (donation != null) {
+                Donation.find({author: {id: req.user._id}}, function(err, donations){
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        res.render("donations",{donations: donations, user: req.user});
+                    }
+                });
+            }
+            else {
+                res.render("newDonation",{user: req.user});
+            }
         }
     });
 });
