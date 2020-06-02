@@ -96,7 +96,7 @@ export default function LogIn() {
           </Grid>
         </form>
       </div>
-      <Box mt={12}>
+      <Box mt={16}>
       </Box>
     </Container>
   );
