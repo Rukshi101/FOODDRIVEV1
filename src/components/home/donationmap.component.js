@@ -1,20 +1,49 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from "react-router-dom";
 import axios from "axios";
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 
+const markers = [
+  { key: 'marker1', position: [43.2, -79.5], content: 'My first popup' },
+  { key: 'marker2', position: [43.6, -79.7], content: 'My second popup' },
+  { key: 'marker3', position: [43.55, -79.57], content: 'My third popup' },
+];
+
+const MyMarkersList = ({ markers }: { markers: Array<MarkerData> }) => {
+  const items = markers.map(({ key, ...props }) => (
+    <MyPopupMarker key={key} {...props} />
+  ))
+  return <Fragment>{items}</Fragment>
+}
+
+const MyPopupMarker = ({ content, position }: Props) => (
+  <Marker position={position}>
+    <Popup>{content}</Popup>
+  </Marker>
+)
+
 export default class DonationMap extends Component {
-  /*
   constructor(props) {
     super(props);
 
-    this.deleteExercise = this.deleteExercise.bind(this);
+    this.createMarkers = this.createMarkers.bind(this);
 
-    this.state = {exercises: []};
+    this.state = {
+      loc: {
+        lat: 43.5890,
+        lng: -79.6441,
+      },
+      zoom: 13
+    }
+
+    for(let marker in markers) {
+      console.log(marker.key);
+    }
   }
 
   componentDidMount() {
+    /*
     axios.get("http://localhost:5000/exercises")
       .then(response => {
         this.setState({ exercises: response.data })
@@ -22,22 +51,29 @@ export default class DonationMap extends Component {
       .catch((error) => {
         console.log(error);
       });
+    */
+    this.setState({
+      ...this.state,
+      markers: [
+        { key: 'marker1', position: [43.2, -79.5], content: 'My first popup' },
+        { key: 'marker2', position: [43.6, -79.7], content: 'My second popup' },
+        { key: 'marker3', position: [43.55, -79.57], content: 'My third popup' },
+      ],
+    });
   }
 
-  deleteExercise(id) {
-    axios.delete("http://localhost:5000/exercises/"+id)
-      .then(res => console.log(res.data));
-    this.setState({
-      exercises: this.state.exercises.filter(el => el._id !== id)
-    })
-  }
-  */
-  state = {
-    loc: {
-      lat: 43.5890,
-      lng: -79.6441,
-    },
-    zoom: 13
+
+  createMarkers() {
+    
+    let returnArray = this.state.markers.map(
+      curr => {
+        return (
+          <Marker position={curr.position}>
+            <Popup>{curr.content}</Popup>
+          </Marker>
+        )
+      }
+    )
   }
 
   render(){
@@ -48,6 +84,7 @@ export default class DonationMap extends Component {
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+          <MyMarkersList markers={markers}/>
         </Map>
         <br/>
       </div>
